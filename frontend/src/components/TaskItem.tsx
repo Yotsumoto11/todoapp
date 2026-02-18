@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react';
+import { useState, type FormEvent, type ReactNode } from 'react';
 
 import type { Task } from '../services/taskTypes.js';
 import { DeleteTaskDialog } from './DeleteTaskDialog.js';
@@ -13,9 +13,10 @@ type TaskItemProps = {
   onSaveEdits: (taskId: string, values: EditTaskValues) => Promise<void>;
   onToggleStatus: (task: Task) => Promise<void>;
   onDeleteTask: (taskId: string) => Promise<void>;
+  dueStatusBadge?: ReactNode;
 };
 
-export function TaskItem({ task, onSaveEdits, onToggleStatus, onDeleteTask }: TaskItemProps) {
+export function TaskItem({ task, onSaveEdits, onToggleStatus, onDeleteTask, dueStatusBadge }: TaskItemProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -104,6 +105,7 @@ export function TaskItem({ task, onSaveEdits, onToggleStatus, onDeleteTask }: Ta
           <p>Status: {task.status}</p>
           <p>Priority: {task.priority}</p>
           <p>Due date: {task.dueDate ?? 'None'}</p>
+          {dueStatusBadge ? <p>Due status: {dueStatusBadge}</p> : null}
           {task.description ? <p>{task.description}</p> : null}
           <div>
             <button type="button" onClick={() => void handleToggleStatus()} disabled={busy}>
