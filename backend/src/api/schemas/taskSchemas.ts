@@ -11,27 +11,27 @@ const isValidIsoCalendarDate = (value: string): boolean => {
 };
 
 export const taskIdParamSchema = z.object({
-  taskId: z.string().uuid()
+  taskId: z.string().uuid('不正なタスクIDです。')
 });
 
 export const createTaskBodySchema = z.object({
-  title: z.string().trim().min(1).max(120),
-  description: z.string().max(2000).optional(),
-  dueDate: z.string().refine(isValidIsoCalendarDate, 'Invalid dueDate').optional(),
+  title: z.string().trim().min(1, 'タイトルを入力してください。').max(120, 'タイトルは120文字以内で入力してください。'),
+  description: z.string().max(2000, '説明は2000文字以内で入力してください。').optional(),
+  dueDate: z.string().refine(isValidIsoCalendarDate, '期限の日付形式が不正です。').optional(),
   priority: z.enum(['low', 'medium', 'high']).optional()
 });
 
 export const updateTaskBodySchema =
   z
     .object({
-      title: z.string().trim().min(1).max(120).optional(),
-      description: z.string().max(2000).nullable().optional(),
-      dueDate: z.string().refine(isValidIsoCalendarDate, 'Invalid dueDate').nullable().optional(),
+      title: z.string().trim().min(1, 'タイトルを入力してください。').max(120, 'タイトルは120文字以内で入力してください。').optional(),
+      description: z.string().max(2000, '説明は2000文字以内で入力してください。').nullable().optional(),
+      dueDate: z.string().refine(isValidIsoCalendarDate, '期限の日付形式が不正です。').nullable().optional(),
       priority: z.enum(['low', 'medium', 'high']).optional(),
       status: z.enum(['todo', 'done']).optional()
     })
     .refine((value) => Object.keys(value).length > 0, {
-      message: 'At least one field is required'
+      message: '更新する項目を1つ以上指定してください。'
     });
 
 export type CreateTaskBody = z.infer<typeof createTaskBodySchema>;

@@ -1,12 +1,12 @@
 import { DueStatusBadge } from './DueStatusBadge.js';
 import { TaskItem } from './TaskItem.js';
-import type { Task } from '../services/taskTypes.js';
+import type { Task, TaskPriority } from '../services/taskTypes.js';
 
 type TaskListProps = {
   tasks: Task[];
   sortBy: 'createdAt' | 'dueDate' | 'priority';
   sortOrder: 'asc' | 'desc';
-  onSaveEdits: (taskId: string, values: { title: string; description: string }) => Promise<void>;
+  onSaveEdits: (taskId: string, values: { title: string; description: string; dueDate: string; priority: TaskPriority }) => Promise<void>;
   onToggleStatus: (task: Task) => Promise<void>;
   onDeleteTask: (taskId: string) => Promise<void>;
 };
@@ -14,28 +14,25 @@ type TaskListProps = {
 function getSortCue(sortBy: TaskListProps['sortBy'], sortOrder: TaskListProps['sortOrder']) {
   if (sortBy === 'dueDate') {
     return {
-      short: `Due date order ${sortOrder === 'asc' ? '↑' : '↓'}`,
-      detail:
-        sortOrder === 'asc' ? 'Due date: earliest first (ascending).' : 'Due date: latest first (descending).'
+      short: `期限順 ${sortOrder === 'asc' ? '↑' : '↓'}`,
+      detail: sortOrder === 'asc' ? '期限が近い順で表示しています。' : '期限が遠い順で表示しています。'
     };
   }
 
   if (sortBy === 'priority') {
     return {
-      short: `Priority order ${sortOrder === 'asc' ? '↑' : '↓'}`,
+      short: `優先度順 ${sortOrder === 'asc' ? '↑' : '↓'}`,
       detail:
         sortOrder === 'asc'
-          ? 'Priority sequence: Low, Medium, High (ascending).'
-          : 'Priority sequence: High, Medium, Low (descending).'
+          ? '優先度が低いものから高いものへ表示しています。'
+          : '優先度が高いものから低いものへ表示しています。'
     };
   }
 
   return {
-    short: `Created time ${sortOrder === 'desc' ? 'newest first' : 'oldest first'}`,
+    short: `作成日時 ${sortOrder === 'desc' ? '新しい順' : '古い順'}`,
     detail:
-      sortOrder === 'desc'
-        ? 'Created time order: newest first (descending).'
-        : 'Created time order: oldest first (ascending).'
+      sortOrder === 'desc' ? '作成日時が新しい順で表示しています。' : '作成日時が古い順で表示しています。'
   };
 }
 
@@ -46,9 +43,9 @@ export function TaskList({ tasks, sortBy, sortOrder, onSaveEdits, onToggleStatus
   return (
     <>
       <p id={sortCueId} aria-live="polite">
-        <strong>Sort:</strong> {sortCue.short}. {sortCue.detail}
+        <strong>並び順:</strong> {sortCue.short}。{sortCue.detail}
       </p>
-      <ul aria-label="Tasks" aria-describedby={sortCueId}>
+      <ul aria-label="タスク一覧" aria-describedby={sortCueId}>
         {tasks.map((task) => (
           <li key={task.id}>
             <TaskItem
@@ -56,7 +53,7 @@ export function TaskList({ tasks, sortBy, sortOrder, onSaveEdits, onToggleStatus
               onSaveEdits={onSaveEdits}
               onToggleStatus={onToggleStatus}
               onDeleteTask={onDeleteTask}
-              dueStatusBadge={<DueStatusBadge dueDate={task.dueDate} />}
+              dueStatusBadge={<DueStatusBadge dueState={task.dueState} />}
             />
           </li>
         ))}

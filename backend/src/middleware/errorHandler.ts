@@ -27,7 +27,7 @@ export class BadRequestError extends ApiError {
 }
 
 export function notFoundHandler(_req: Request, _res: Response, next: NextFunction): void {
-  next(new NotFoundError('Route not found'));
+  next(new NotFoundError('指定されたルートが見つかりません。'));
 }
 
 export function errorHandler(
@@ -50,7 +50,7 @@ export function errorHandler(
   if (err instanceof ZodError) {
     res.status(400).json({
       code: 'BAD_REQUEST',
-      message: 'Validation failed',
+      message: '入力内容を確認してください。',
       details: err.flatten()
     });
     return;
@@ -58,6 +58,6 @@ export function errorHandler(
 
   res.status(500).json({
     code: 'INTERNAL_SERVER_ERROR',
-    message: 'Unexpected server error'
+    message: '予期しないサーバーエラーが発生しました。'
   });
 }

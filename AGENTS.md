@@ -3,6 +3,8 @@
 Auto-generated from all feature plans. Last updated: 2026-02-16
 
 ## Active Technologies
+- TypeScript 5.x on Node.js 22 LTS + React 19, Express 5, Zod, Prisma (001-todo-web-app)
+- SQLite (via Prisma ORM + migrations) (001-todo-web-app)
 
 - TypeScript 5.x (Node.js 22 LTS) + React 19, Express 5, Zod, Prisma (001-todo-web-app)
 
@@ -23,6 +25,7 @@ npm test && npm run lint
 TypeScript 5.x (Node.js 22 LTS): Follow standard conventions
 
 ## Recent Changes
+- 001-todo-web-app: Added TypeScript 5.x on Node.js 22 LTS + React 19, Express 5, Zod, Prisma
 
 - 001-todo-web-app: Added TypeScript 5.x (Node.js 22 LTS) + React 19, Express 5, Zod, Prisma
 

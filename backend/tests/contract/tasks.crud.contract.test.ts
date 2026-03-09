@@ -18,6 +18,7 @@ describe('Task CRUD contract', () => {
         status: 'todo',
         priority: 'high',
         dueDate: null,
+        dueState: 'none',
         completedAt: null,
         createdAt: expect.any(String),
         updatedAt: expect.any(String)
@@ -58,7 +59,7 @@ describe('Task CRUD contract', () => {
     expect(response.status).toBe(404);
     expect(response.body).toEqual({
       code: 'NOT_FOUND',
-      message: 'Task not found'
+      message: 'タスクが見つかりません。'
     });
   });
 

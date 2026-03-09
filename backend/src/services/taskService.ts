@@ -4,6 +4,7 @@ import { NotFoundError } from '../middleware/errorHandler.js';
 import type { TaskListQuery } from '../api/schemas/taskQuerySchemas.js';
 import type { CreateTaskBody, UpdateTaskBody } from '../api/schemas/taskSchemas.js';
 import { taskRepository } from '../models/taskRepository.js';
+import { classifyDueState, type DueState } from './dueState.js';
 
 export type TaskDto = {
   id: string;
@@ -12,6 +13,7 @@ export type TaskDto = {
   status: 'todo' | 'done';
   dueDate: string | null;
   priority: 'low' | 'medium' | 'high';
+  dueState: DueState;
   createdAt: string;
   updatedAt: string;
   completedAt: string | null;
@@ -33,6 +35,7 @@ function toTaskDto(task: Task): TaskDto {
     status: task.status as 'todo' | 'done',
     dueDate: task.dueDate ? task.dueDate.toISOString().slice(0, 10) : null,
     priority: task.priority as 'low' | 'medium' | 'high',
+    dueState: classifyDueState(task.dueDate),
     createdAt: task.createdAt.toISOString(),
     updatedAt: task.updatedAt.toISOString(),
     completedAt: task.completedAt ? task.completedAt.toISOString() : null
@@ -54,7 +57,7 @@ export const taskService = {
   async updateTask(taskId: string, input: UpdateTaskBody): Promise<TaskDto> {
     const existing = await taskRepository.findById(taskId);
     if (!existing) {
-      throw new NotFoundError('Task not found');
+      throw new NotFoundError('タスクが見つかりません。');
     }
 
     const nextStatus = input.status ?? (existing.status as 'todo' | 'done');
@@ -79,7 +82,7 @@ export const taskService = {
   async deleteTask(taskId: string): Promise<void> {
     const existing = await taskRepository.findById(taskId);
     if (!existing) {
-      throw new NotFoundError('Task not found');
+      throw new NotFoundError('タスクが見つかりません。');
     }
 
     await taskRepository.delete(taskId);

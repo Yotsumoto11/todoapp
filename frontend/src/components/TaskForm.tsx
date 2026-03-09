@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react';
+import { useState, type FormEvent, type InvalidEvent } from 'react';
 
 import type { TaskPriority } from '../services/taskTypes.js';
 
@@ -21,8 +21,23 @@ const initialValues: TaskFormValues = {
   priority: 'medium'
 };
 
+const priorityLabels: Record<TaskPriority, string> = {
+  low: '低',
+  medium: '中',
+  high: '高'
+};
+
 export function TaskForm({ onSubmit, submitting }: TaskFormProps) {
   const [values, setValues] = useState<TaskFormValues>(initialValues);
+
+  function setTitleValidationMessage(event: InvalidEvent<HTMLInputElement>) {
+    if (event.currentTarget.validity.valueMissing) {
+      event.currentTarget.setCustomValidity('タイトルを入力してください。');
+      return;
+    }
+
+    event.currentTarget.setCustomValidity('');
+  }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -35,59 +50,69 @@ export function TaskForm({ onSubmit, submitting }: TaskFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit} aria-label="Create task form">
-      <div>
-        <label htmlFor="task-title">Title</label>
+    <form className="form-card" onSubmit={handleSubmit} aria-label="タスク作成フォーム">
+      <label htmlFor="task-title">
+        <span>タイトル</span>
         <input
           id="task-title"
           name="title"
           type="text"
           required
           maxLength={120}
+          placeholder="例: 牛乳を買う"
           value={values.title}
           onChange={(event) => setValues((current) => ({ ...current, title: event.target.value }))}
+          onInvalid={setTitleValidationMessage}
+          onInput={(event) => event.currentTarget.setCustomValidity('')}
         />
-      </div>
+      </label>
 
-      <div>
-        <label htmlFor="task-description">Description</label>
+      <label htmlFor="task-description">
+        <span>説明</span>
         <textarea
           id="task-description"
           name="description"
           maxLength={2000}
+          placeholder="補足があれば入力してください"
           value={values.description}
           onChange={(event) => setValues((current) => ({ ...current, description: event.target.value }))}
         />
+      </label>
+
+      <div className="form-grid">
+        <label htmlFor="task-due-date">
+          <span>期限</span>
+          <input
+            id="task-due-date"
+            name="dueDate"
+            type="date"
+            className="compact-date-input"
+            value={values.dueDate}
+            onChange={(event) => setValues((current) => ({ ...current, dueDate: event.target.value }))}
+          />
+        </label>
+
+        <label htmlFor="task-priority">
+          <span>優先度</span>
+          <select
+            id="task-priority"
+            name="priority"
+            className="compact-priority-select"
+            value={values.priority}
+            onChange={(event) => setValues((current) => ({ ...current, priority: event.target.value as TaskPriority }))}
+          >
+            <option value="low">{priorityLabels.low}</option>
+            <option value="medium">{priorityLabels.medium}</option>
+            <option value="high">{priorityLabels.high}</option>
+          </select>
+        </label>
       </div>
 
-      <div>
-        <label htmlFor="task-due-date">Due date</label>
-        <input
-          id="task-due-date"
-          name="dueDate"
-          type="date"
-          value={values.dueDate}
-          onChange={(event) => setValues((current) => ({ ...current, dueDate: event.target.value }))}
-        />
+      <div className="form-actions">
+        <button type="submit" className="primary-button" disabled={submitting}>
+          {submitting ? '作成中…' : 'タスクを作成'}
+        </button>
       </div>
-
-      <div>
-        <label htmlFor="task-priority">Priority</label>
-        <select
-          id="task-priority"
-          name="priority"
-          value={values.priority}
-          onChange={(event) => setValues((current) => ({ ...current, priority: event.target.value as TaskPriority }))}
-        >
-          <option value="low">Low</option>
-          <option value="medium">Medium</option>
-          <option value="high">High</option>
-        </select>
-      </div>
-
-      <button type="submit" disabled={submitting}>
-        {submitting ? 'Creating…' : 'Create task'}
-      </button>
     </form>
   );
 }

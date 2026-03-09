@@ -1,0 +1,128 @@
+[1mdiff --git a/specs/001-todo-web-app/plan.md b/specs/001-todo-web-app/plan.md[m
+[1mindex c1e6fb7..7be935b 100644[m
+[1m--- a/specs/001-todo-web-app/plan.md[m
+[1m+++ b/specs/001-todo-web-app/plan.md[m
+[36m@@ -1,45 +1,33 @@[m
+ # Implementation Plan: TODO Management Web App[m
+ [m
+[31m-**Branch**: `001-todo-web-app` | **Date**: 2026-02-16 | **Spec**: `/home/ayotsumo/proj/sample-spec-kit/specs/001-todo-web-app/spec.md`[m
+[31m-**Input**: Feature specification from `/specs/001-todo-web-app/spec.md`[m
+[32m+[m[32m**Branch**: `001-todo-web-app` | **Date**: 2026-03-03 | **Spec**: [/home/ayotsumo/proj/sample-spec-kit/specs/001-todo-web-app/spec.md](/home/ayotsumo/proj/sample-spec-kit/specs/001-todo-web-app/spec.md)[m
+[32m+[m[32m**Input**: Feature specification from `/home/ayotsumo/proj/sample-spec-kit/specs/001-todo-web-app/spec.md`[m
+ [m
+ ## Summary[m
+ [m
+[31m-単一利用者向けTODO管理Webアプリを提供する。MVPはタスク作成・更新・完了・削除と一覧表示を中心に構成し、[m
+[31m-次段でフィルタ/ソート、期限可視化を追加する。技術方針はWebアプリ構成（frontend + backend）とし、[m
+[31m-小規模運用を前提にシンプルな永続化とREST API契約を採用する。[m
+[32m+[m[32mBuild a single-user TODO web app that supports full task lifecycle management (create/edit/complete/reopen/delete), list filtering/sorting, and overdue visibility. Implementation uses a React frontend and Express API with Prisma + SQLite persistence, with contract, integration, and UI-flow verification aligned to story priorities (P1 -> P2 -> P3).[m
+ [m
+ ## Technical Context[m
+ [m
+[31m-**Language/Version**: TypeScript 5.x (Node.js 22 LTS)  [m
+[32m+[m[32m**Language/Version**: TypeScript 5.x on Node.js 22 LTS[m[41m  [m
+ **Primary Dependencies**: React 19, Express 5, Zod, Prisma  [m
+[31m-**Storage**: SQLite (single-user local persistence)  [m
+[31m-**Testing**: Vitest, Supertest, Playwright  [m
+[31m-**Target Platform**: Modern desktop/mobile web browsers[m
+[31m-**Project Type**: web (frontend + backend)  [m
+[31m-**Performance Goals**: List/filter/sort actions render results within 1 second for 1,000 tasks at p95  [m
+[31m-**Constraints**: Single-user scope only, no external notification delivery, no role/permission model in initial release  [m
+[31m-**Scale/Scope**: 1 active user profile, up to 10,000 stored tasks, 3 prioritized user stories (US1-US3)[m
+[32m+[m[32m**Storage**: SQLite (via Prisma ORM + migrations)[m[41m  [m
+[32m+[m[32m**Testing**: Vitest/Jest-style unit tests, backend integration/contract tests, frontend e2e smoke coverage[m[41m  [m
+[32m+[m[32m**Target Platform**: Web browsers (frontend) + Linux/macOS Node runtime (backend)[m[41m  [m
+[32m+[m[32m**Project Type**: Web application (separate `frontend/` and `backend/`)[m[41m  [m
+[32m+[m[32m**Performance Goals**: P95 list query under 200ms at 1,000 tasks; key UI actions respond within 300ms locally[m[41m  [m
+[32m+[m[32m**Constraints**: Single-user scope, no external auth/notifications, deterministic filter/sort behavior, explicit delete confirmation[m[41m  [m
+[32m+[m[32m**Scale/Scope**: 1 active user, up to ~1,000 tasks, CRUD + filter/sort + urgency highlighting[m
+ [m
+[31m-## Constitution Check[m
+[32m+[m[32m## Constitution Check (Pre-Design)[m
+ [m
+ *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*[m
+ [m
+[31m-### Pre-Design Gate Check[m
+[31m-[m
+[31m-- [x] Spec-first gate: spec includes prioritized stories, acceptance scenarios, and measurable outcomes.[m
+[31m-- [x] Clarification gate: no unresolved `NEEDS CLARIFICATION` markers in spec.[m
+[31m-- [x] Story independence gate: US1/US2/US3 have independent test definitions.[m
+[31m-- [x] Verification gate: each story has independent validation criteria; no explicit TDD mandate in spec.[m
+[31m-- [x] Traceability gate: FR-to-US mapping exists in Constitution Alignment.[m
+[31m-[m
+[31m-### Post-Design Gate Check[m
+[31m-[m
+[31m-- [x] Spec-first gate: design artifacts preserve US1-first MVP delivery.[m
+[31m-- [x] Clarification gate: research decisions resolve technical choices without open unknowns.[m
+[31m-- [x] Story independence gate: data model and API support standalone story completion.[m
+[31m-- [x] Verification gate: quickstart includes validation flow per story.[m
+[31m-- [x] Traceability gate: contracts and data model link back to FR-001 through FR-009.[m
+[32m+[m[32m- [x] Spec-first gate: `/home/ayotsumo/proj/sample-spec-kit/specs/001-todo-web-app/spec.md` contains prioritized stories (P1-P3), acceptance scenarios, and measurable success criteria.[m
+[32m+[m[32m- [x] Clarification gate: no unresolved `NEEDS CLARIFICATION` items remain in technical context.[m
+[32m+[m[32m- [x] Story independence gate: US1 (task lifecycle), US2 (filter/sort), US3 (overdue visibility) are independently testable slices.[m
+[32m+[m[32m- [x] Verification gate: independent validation paths are defined in `/home/ayotsumo/proj/sample-spec-kit/specs/001-todo-web-app/quickstart.md`.[m
+[32m+[m[32m- [x] Traceability gate: FR mapping is linked across `/spec.md`, `/research.md`, `/data-model.md`, `/contracts/openapi.yaml`, and `/tasks.md`.[m
+ [m
+ ## Project Structure[m
+ [m
+[36m@@ -60,11 +48,20 @@[m [mspecs/001-todo-web-app/[m
+ [m
+ ```text[m
+ backend/[m
+[32m+[m[32m├── prisma/[m
+[32m+[m[32m│   └── migrations/[m
+ ├── src/[m
+[32m+[m[32m│   ├── api/[m
+[32m+[m[32m│   │   ├── routes/[m
+[32m+[m[32m│   │   └── schemas/[m
+[32m+[m[32m│   ├── middleware/[m
+ │   ├── models/[m
+ │   ├── services/[m
+[31m-│   └── api/[m
+[32m+[m[32m│   └── lib/[m
+ └── tests/[m
+[32m+[m[32m    ├── contract/[m
+[32m+[m[32m    ├── integration/[m
+[32m+[m[32m    └── helpers/[m
+ [m
+ frontend/[m
+ ├── src/[m
+[36m@@ -74,9 +71,35 @@[m [mfrontend/[m
+ └── tests/[m
+ ```[m
+ [m
+[31m-**Structure Decision**: Web application structure (`frontend` + `backend`) is selected to isolate API[m
+[31m-contract and UI concerns while keeping story-level delivery independent.[m
+[32m+[m[32m**Structure Decision**: Use the web-application split (`backend/`, `frontend/`) to keep API contract and UI behavior independently testable while preserving clear story-based increments.[m
+[32m+[m
+[32m+[m[32m## Phase 0 Output: Research[m
+[32m+[m
+[32m+[m[32m- Research completed in [/home/ayotsumo/proj/sample-spec-kit/specs/001-todo-web-app/research.md](/home/ayotsumo/proj/sample-spec-kit/specs/001-todo-web-app/research.md).[m
+[32m+[m[32m- Decisions captured for stack/runtime, persistence, API style, validation strategy, and test strategy.[m
+[32m+[m[32m- All technical-context unknowns resolved; no remaining clarification blockers.[m
+[32m+[m
+[32m+[m[32m## Phase 1 Output: Design & Contracts[m
+[32m+[m
+[32m+[m[32m- Data model: [/home/ayotsumo/proj/sample-spec-kit/specs/001-todo-web-app/data-model.md](/home/ayotsumo/proj/sample-spec-kit/specs/001-todo-web-app/data-model.md)[m
+[32m+[m[32m- API contract: [/home/ayotsumo/proj/sample-spec-kit/specs/001-todo-web-app/contracts/openapi.yaml](/home/ayotsumo/proj/sample-spec-kit/specs/001-todo-web-app/contracts/openapi.yaml)[m
+[32m+[m[32m- Validation guide: [/home/ayotsumo/proj/sample-spec-kit/specs/001-todo-web-app/quickstart.md](/home/ayotsumo/proj/sample-spec-kit/specs/001-todo-web-app/quickstart.md)[m
+[32m+[m
+[32m+[m[32m## Traceability[m
+[32m+[m
+[32m+[m[32m- FR-001..FR-004 (task lifecycle) -> `data-model.md` (`Task`), `contracts/openapi.yaml` (`POST /tasks`, `PATCH /tasks/{taskId}`, `DELETE /tasks/{taskId}`), `quickstart.md` (US1 flow).[m
+[32m+[m[32m- FR-005..FR-007 (list/filter/sort) -> `data-model.md` (`TaskListQuery`), `contracts/openapi.yaml` (`GET /tasks` query params), `quickstart.md` (US2 flow).[m
+[32m+[m[32m- FR-008 (overdue/today distinction) -> `data-model.md` (`dueDate` + status rules), `contracts/openapi.yaml` (`dueWindow`), `quickstart.md` (US3 flow).[m
+[32m+[m[32m- FR-009 (persistence across sessions) -> `research.md` (SQLite + Prisma decision), `backend/prisma/` migration-backed storage path.[m
+[32m+[m
+[32m+[m[32m## Constitution Check (Post-Design Re-check)[m
+[32m+[m
+[32m+[m[32m- [x] Spec-first gate remains satisfied; design scope aligns with spec value statements.[m
+[32m+[m[32m- [x] Clarification gate remains satisfied; no unresolved unknowns after research/design.[m
+[32m+[m[32m- [x] Story independence gate remains satisfied by discrete API/UI increments per story.[m
+[32m+[m[32m- [x] Verification gate remains satisfied; per-story validation flows and test commands are defined.[m
+[32m+[m[32m- [x] Traceability gate remains satisfied via explicit FR-to-artifact mappings and concrete paths.[m
+ [m
+ ## Complexity Tracking[m
+ [m
+[31m-No constitutional violations identified. Complexity exceptions are not required.[m
+[32m+[m[32mNo constitution violations requiring justification.[m

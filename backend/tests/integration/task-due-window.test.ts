@@ -9,16 +9,21 @@ function dayOffset(days: number): string {
   return date.toISOString().slice(0, 10);
 }
 
-describe('Task query integration', () => {
-  it('supports dueWindow and pagination behavior', async () => {
+describe('Task due window integration', () => {
+  it('classifies dueState and filters by dueWindow', async () => {
     await request(app).post('/tasks').send({ title: '期限なし' });
     await request(app).post('/tasks').send({ title: '期限切れ', dueDate: dayOffset(-1) });
-    await request(app).post('/tasks').send({ title: '期限が近い', dueDate: dayOffset(0) });
+    await request(app).post('/tasks').send({ title: '期限が近い', dueDate: dayOffset(1) });
     await request(app).post('/tasks').send({ title: '期限あり', dueDate: dayOffset(5) });
 
-    const none = await request(app).get('/tasks?dueWindow=none');
-    expect(none.status).toBe(200);
-    expect(none.body.items.map((task: { title: string }) => task.title)).toEqual(['期限なし']);
+    const all = await request(app).get('/tasks?sortBy=createdAt&sortOrder=asc');
+    expect(all.status).toBe(200);
+    expect(all.body.items.map((task: { dueState: string }) => task.dueState)).toEqual([
+      'none',
+      'overdue',
+      'dueSoon',
+      'upcoming'
+    ]);
 
     const overdue = await request(app).get('/tasks?dueWindow=overdue');
     expect(overdue.body.items.map((task: { title: string }) => task.title)).toEqual(['期限切れ']);
@@ -29,10 +34,7 @@ describe('Task query integration', () => {
     const upcoming = await request(app).get('/tasks?dueWindow=upcoming');
     expect(upcoming.body.items.map((task: { title: string }) => task.title)).toEqual(['期限あり']);
 
-    const paged = await request(app).get('/tasks?sortBy=createdAt&sortOrder=asc&page=2&pageSize=2');
-    expect(paged.status).toBe(200);
-    expect(paged.body.page).toBe(2);
-    expect(paged.body.pageSize).toBe(2);
-    expect(paged.body.items).toHaveLength(2);
+    const none = await request(app).get('/tasks?dueWindow=none');
+    expect(none.body.items.map((task: { title: string }) => task.title)).toEqual(['期限なし']);
   });
 });

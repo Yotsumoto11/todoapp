@@ -11,11 +11,11 @@
 
 **Purpose**: Project initialization and baseline tooling for frontend/backend workspace.
 
-- [ ] T001 Initialize workspace scripts and npm workspaces in `package.json`
-- [ ] T002 Initialize backend package and scripts in `backend/package.json`
-- [ ] T003 [P] Initialize frontend package and scripts in `frontend/package.json`
-- [ ] T004 [P] Add shared TypeScript compiler options in `tsconfig.base.json`
-- [ ] T005 [P] Add lint and formatting configuration in `.eslintrc.cjs`
+- [x] T001 Initialize workspace scripts and npm workspaces in `package.json`
+- [x] T002 Initialize backend package and scripts in `backend/package.json`
+- [x] T003 [P] Initialize frontend package and scripts in `frontend/package.json`
+- [x] T004 [P] Add shared TypeScript compiler options in `tsconfig.base.json`
+- [x] T005 [P] Add lint and formatting configuration in `.eslintrc.cjs`
 
 ---
 
@@ -23,15 +23,15 @@
 
 **Purpose**: Core infrastructure that MUST be complete before any user story implementation.
 
-- [ ] T006 Define Task persistence schema in `backend/prisma/schema.prisma`
-- [ ] T007 Create initial database migration for Task schema in `backend/prisma/migrations/001_init/migration.sql`
-- [ ] T008 [P] Create Prisma client bootstrap in `backend/src/lib/prisma.ts`
-- [ ] T009 Create Express app bootstrap and middleware wiring in `backend/src/app.ts`
-- [ ] T010 [P] Add standardized API error handling middleware in `backend/src/middleware/errorHandler.ts`
-- [ ] T011 [P] Create API router entrypoint in `backend/src/api/index.ts`
-- [ ] T012 [P] Create frontend API client bootstrap in `frontend/src/services/apiClient.ts`
-- [ ] T013 [P] Define shared task/query UI types in `frontend/src/services/taskTypes.ts`
-- [ ] T014 Create initial task list page shell in `frontend/src/pages/TaskListPage.tsx`
+- [x] T006 Define Task persistence schema in `backend/prisma/schema.prisma`
+- [x] T007 Create initial database migration for Task schema in `backend/prisma/migrations/001_init/migration.sql`
+- [x] T008 [P] Create Prisma client bootstrap in `backend/src/lib/prisma.ts`
+- [x] T009 Create Express app bootstrap and middleware wiring in `backend/src/app.ts`
+- [x] T010 [P] Add standardized API error handling middleware in `backend/src/middleware/errorHandler.ts`
+- [x] T011 [P] Create API router entrypoint in `backend/src/api/index.ts`
+- [x] T012 [P] Create frontend API client bootstrap in `frontend/src/services/apiClient.ts`
+- [x] T013 [P] Define shared task/query UI types in `frontend/src/services/taskTypes.ts`
+- [x] T014 Create initial task list page shell in `frontend/src/pages/TaskListPage.tsx`
 
 **Checkpoint**: Foundation ready for user story implementation.
 
@@ -45,22 +45,22 @@
 
 ### Tests for User Story 1
 
-- [ ] T015 [P] [US1] Add contract tests for create/update/delete task endpoints in `backend/tests/contract/tasks.crud.contract.test.ts`
-- [ ] T016 [P] [US1] Add backend integration test for task lifecycle in `backend/tests/integration/task-lifecycle.test.ts`
-- [ ] T017 [P] [US1] Add end-to-end lifecycle test in `frontend/tests/e2e/us1-task-lifecycle.spec.ts`
+- [x] T015 [P] [US1] Add contract tests for create/update/delete task endpoints in `backend/tests/contract/tasks.crud.contract.test.ts`
+- [x] T016 [P] [US1] Add backend integration test for task lifecycle in `backend/tests/integration/task-lifecycle.test.ts`
+- [x] T017 [P] [US1] Add end-to-end lifecycle test in `frontend/tests/e2e/us1-task-lifecycle.spec.ts`
 
 ### Implementation for User Story 1
 
-- [ ] T018 [P] [US1] Define create/update request validation schemas in `backend/src/api/schemas/taskSchemas.ts`
-- [ ] T019 [P] [US1] Implement Task CRUD repository operations in `backend/src/models/taskRepository.ts`
-- [ ] T020 [US1] Implement lifecycle business logic in `backend/src/services/taskService.ts`
-- [ ] T021 [US1] Implement POST/PATCH/DELETE handlers in `backend/src/api/routes/tasksCrudRoutes.ts`
-- [ ] T022 [US1] Register CRUD routes in `backend/src/api/index.ts`
-- [ ] T023 [P] [US1] Implement task create/edit form in `frontend/src/components/TaskForm.tsx`
-- [ ] T024 [P] [US1] Implement task row actions for complete/reopen/edit/delete in `frontend/src/components/TaskItem.tsx`
-- [ ] T025 [US1] Implement frontend task CRUD service calls in `frontend/src/services/taskApi.ts`
-- [ ] T026 [US1] Wire lifecycle flows on task list page in `frontend/src/pages/TaskListPage.tsx`
-- [ ] T027 [US1] Add explicit delete confirmation dialog in `frontend/src/components/DeleteTaskDialog.tsx`
+- [x] T018 [P] [US1] Define create/update request validation schemas in `backend/src/api/schemas/taskSchemas.ts`
+- [x] T019 [P] [US1] Implement Task CRUD repository operations in `backend/src/models/taskRepository.ts`
+- [x] T020 [US1] Implement lifecycle business logic in `backend/src/services/taskService.ts`
+- [x] T021 [US1] Implement POST/PATCH/DELETE handlers in `backend/src/api/routes/tasksCrudRoutes.ts`
+- [x] T022 [US1] Register CRUD routes in `backend/src/api/index.ts`
+- [x] T023 [P] [US1] Implement task create/edit form in `frontend/src/components/TaskForm.tsx`
+- [x] T024 [P] [US1] Implement task row actions for complete/reopen/edit/delete in `frontend/src/components/TaskItem.tsx`
+- [x] T025 [US1] Implement frontend task CRUD service calls in `frontend/src/services/taskApi.ts`
+- [x] T026 [US1] Wire lifecycle flows on task list page in `frontend/src/pages/TaskListPage.tsx`
+- [x] T027 [US1] Add explicit delete confirmation dialog in `frontend/src/components/DeleteTaskDialog.tsx`
 
 **Checkpoint**: US1 is independently functional and testable.
 
@@ -74,18 +74,18 @@
 
 ### Tests for User Story 2
 
-- [ ] T028 [P] [US2] Add contract tests for task list query parameters in `backend/tests/contract/tasks.query.contract.test.ts`
-- [ ] T029 [P] [US2] Add backend integration test for filtering and sorting behavior in `backend/tests/integration/task-query.test.ts`
-- [ ] T030 [P] [US2] Add end-to-end filter/sort journey test in `frontend/tests/e2e/us2-filter-sort.spec.ts`
+- [x] T028 [P] [US2] Add contract tests for task list query parameters in `backend/tests/contract/tasks.query.contract.test.ts`
+- [x] T029 [P] [US2] Add backend integration test for filtering and sorting behavior in `backend/tests/integration/task-query.test.ts`
+- [x] T030 [P] [US2] Add end-to-end filter/sort journey test in `frontend/tests/e2e/us2-filter-sort.spec.ts`
 
 ### Implementation for User Story 2
 
-- [ ] T031 [P] [US2] Define list query validation schema in `backend/src/api/schemas/taskQuerySchemas.ts`
-- [ ] T032 [US2] Implement repository filtering/sorting query builder in `backend/src/models/taskRepository.ts`
-- [ ] T033 [US2] Implement GET /tasks query handling in `backend/src/api/routes/tasksQueryRoutes.ts`
-- [ ] T034 [US2] Build filter and sort controls in `frontend/src/components/TaskFilters.tsx`
-- [ ] T035 [US2] Integrate filter/sort state with API calls in `frontend/src/pages/TaskListPage.tsx`
-- [ ] T036 [US2] Render sorted list metadata (due date and priority ordering cues) in `frontend/src/components/TaskList.tsx`
+- [x] T031 [P] [US2] Define list query validation schema in `backend/src/api/schemas/taskQuerySchemas.ts`
+- [x] T032 [US2] Implement repository filtering/sorting query builder in `backend/src/models/taskRepository.ts`
+- [x] T033 [US2] Implement GET /tasks query handling in `backend/src/api/routes/tasksQueryRoutes.ts`
+- [x] T034 [US2] Build filter and sort controls in `frontend/src/components/TaskFilters.tsx`
+- [x] T035 [US2] Integrate filter/sort state with API calls in `frontend/src/pages/TaskListPage.tsx`
+- [x] T036 [US2] Render sorted list metadata (due date and priority ordering cues) in `frontend/src/components/TaskList.tsx`
 
 **Checkpoint**: US2 is independently functional and testable.
 
@@ -99,16 +99,16 @@
 
 ### Tests for User Story 3
 
-- [ ] T037 [P] [US3] Add backend integration test for overdue/today/upcoming classification in `backend/tests/integration/task-due-window.test.ts`
-- [ ] T038 [P] [US3] Add end-to-end due-visibility test in `frontend/tests/e2e/us3-due-visibility.spec.ts`
+- [x] T037 [P] [US3] Add backend integration test for overdue/today/upcoming classification in `backend/tests/integration/task-due-window.test.ts`
+- [x] T038 [P] [US3] Add end-to-end due-visibility test in `frontend/tests/e2e/us3-due-visibility.spec.ts`
 
 ### Implementation for User Story 3
 
-- [ ] T039 [P] [US3] Implement due-state classifier utility in `backend/src/services/dueState.ts`
-- [ ] T040 [US3] Include due-state metadata in GET /tasks response mapping in `backend/src/api/routes/tasksQueryRoutes.ts`
-- [ ] T041 [P] [US3] Implement due-status badge component and styles in `frontend/src/components/DueStatusBadge.tsx`
-- [ ] T042 [US3] Render due-status badges in task list rows in `frontend/src/components/TaskList.tsx`
-- [ ] T043 [US3] Add due-window shortcut controls in `frontend/src/components/TaskFilters.tsx`
+- [x] T039 [P] [US3] Implement due-state classifier utility in `backend/src/services/dueState.ts`
+- [x] T040 [US3] Include due-state metadata in GET /tasks response mapping in `backend/src/api/routes/tasksQueryRoutes.ts`
+- [x] T041 [P] [US3] Implement due-status badge component and styles in `frontend/src/components/DueStatusBadge.tsx`
+- [x] T042 [US3] Render due-status badges in task list rows in `frontend/src/components/TaskList.tsx`
+- [x] T043 [US3] Add due-window shortcut controls in `frontend/src/components/TaskFilters.tsx`
 
 **Checkpoint**: US3 is independently functional and testable.
 
@@ -121,7 +121,7 @@
 - [ ] T044 [P] Add list-performance regression test for 1,000 tasks in `backend/tests/performance/task-list.performance.test.ts`
 - [ ] T045 [P] Update quickstart verification flow with finalized commands in `specs/001-todo-web-app/quickstart.md`
 - [ ] T046 [P] Align API examples and response fields with implementation in `specs/001-todo-web-app/contracts/openapi.yaml`
-- [ ] T047 Add consolidated test/lint scripts in root workspace config `package.json`
+- [x] T047 Add consolidated test/lint scripts in root workspace config `package.json`
 - [ ] T048 Record final validation results for lint/unit/integration/e2e in `specs/001-todo-web-app/tasks-validation.md`
 
 ---

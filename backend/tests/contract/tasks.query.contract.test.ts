@@ -17,6 +17,11 @@ describe('Task query contract', () => {
         total: 1
       })
     );
+    expect(response.body.items[0]).toEqual(
+      expect.objectContaining({
+        dueState: 'none'
+      })
+    );
   });
 
   it('filters by status', async () => {

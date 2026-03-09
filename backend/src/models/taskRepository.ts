@@ -1,10 +1,11 @@
 import type { Prisma, Task } from '@prisma/client';
 
 import { prisma } from '../lib/prisma.js';
+import { getDueSoonEndExclusive } from '../services/dueState.js';
 
 export type TaskStatus = 'todo' | 'done';
 export type TaskPriority = 'low' | 'medium' | 'high';
-export type DueWindow = 'overdue' | 'today' | 'upcoming' | 'none';
+export type DueWindow = 'overdue' | 'dueSoon' | 'upcoming' | 'none';
 
 export type ListTasksInput = {
   status?: TaskStatus;
@@ -75,8 +76,7 @@ export const taskRepository = {
   async list(input: ListTasksInput): Promise<ListTasksResult> {
     const now = new Date();
     const todayStart = toUtcDateStart(now);
-    const tomorrowStart = new Date(todayStart);
-    tomorrowStart.setUTCDate(tomorrowStart.getUTCDate() + 1);
+    const dueSoonEndExclusive = getDueSoonEndExclusive(now);
 
     const where: Prisma.TaskWhereInput = {
       ...(input.status ? { status: input.status } : {})
@@ -90,12 +90,12 @@ export const taskRepository = {
       where.dueDate = { lt: todayStart };
     }
 
-    if (input.dueWindow === 'today') {
-      where.dueDate = { gte: todayStart, lt: tomorrowStart };
+    if (input.dueWindow === 'dueSoon') {
+      where.dueDate = { gte: todayStart, lt: dueSoonEndExclusive };
     }
 
     if (input.dueWindow === 'upcoming') {
-      where.dueDate = { gte: tomorrowStart };
+      where.dueDate = { gte: dueSoonEndExclusive };
     }
 
     const all = await prisma.task.findMany({ where });

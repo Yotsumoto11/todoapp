@@ -16,7 +16,7 @@ export async function apiClient<T>(path: string, init?: ApiRequestInit): Promise
 
   if (!response.ok) {
     const payload = (await response.json().catch(() => null)) as { message?: string } | null;
-    throw new Error(payload?.message ?? `Request failed with status ${response.status}`);
+    throw new Error(payload?.message ?? `リクエストに失敗しました。(${response.status})`);
   }
 
   if (response.status === 204) {

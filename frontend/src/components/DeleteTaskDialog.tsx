@@ -12,15 +12,15 @@ export function DeleteTaskDialog({ idSuffix, taskTitle, confirming, onConfirm, o
 
   return (
     <div role="alertdialog" aria-modal="true" aria-labelledby={titleId} aria-describedby={bodyId}>
-      <h4 id={titleId}>Delete task?</h4>
+      <h4 id={titleId}>タスクを削除しますか？</h4>
       <p id={bodyId}>
-        This will permanently delete <strong>{taskTitle}</strong>.
+        <strong>{taskTitle}</strong> を完全に削除します。この操作は元に戻せません。
       </p>
       <button type="button" onClick={onCancel} disabled={confirming}>
-        Cancel
+        キャンセル
       </button>
       <button type="button" onClick={() => void onConfirm()} disabled={confirming} autoFocus>
-        {confirming ? 'Deleting…' : 'Delete'}
+        {confirming ? '削除中…' : '削除する'}
       </button>
     </div>
   );

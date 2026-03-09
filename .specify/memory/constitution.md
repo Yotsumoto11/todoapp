@@ -1,92 +1,101 @@
 <!--
 Sync Impact Report
-- Version change: N/A (template) -> 1.0.0
+- Version change: 1.0.0 -> 1.1.0
 - Modified principles:
-  - Template Principle 1 -> I. Spec-First Value Definition
-  - Template Principle 2 -> II. Constitution-Gated Planning
-  - Template Principle 3 -> III. Story-Scoped Independent Delivery
-  - Template Principle 4 -> IV. Verification by Explicit Criteria
-  - Template Principle 5 -> V. End-to-End Traceability
+  - I. 仕様先行の価値定義
+  - II. 憲章ゲート付き計画
+  - III. ユーザーストーリー単位の独立提供
+  - IV. 明示的基準による検証
+  - V. エンドツーエンドのトレーサビリティ
 - Added sections:
-  - Operational Constraints
-  - Workflow & Quality Gates
+  - 言語と文言の標準
 - Removed sections:
   - None
 - Templates requiring updates:
-  - ✅ updated: .specify/templates/plan-template.md
-  - ✅ updated: .specify/templates/spec-template.md
-  - ✅ updated: .specify/templates/tasks-template.md
+  - ⚠ pending: .specify/templates/plan-template.md
+  - ⚠ pending: .specify/templates/spec-template.md
+  - ⚠ pending: .specify/templates/tasks-template.md
   - ⚠ pending: .specify/templates/commands/*.md (directory not present)
 - Deferred TODOs:
-  - None
+  - テンプレート群へ日本語標準ルールを同期する
 -->
-# Sample Spec Kit Constitution
+# Sample Spec Kit 憲章
 
-## Core Principles
+## 基本原則
 
-### I. Spec-First Value Definition
-Every feature MUST begin with a specification that defines prioritized user stories,
-testable acceptance scenarios, measurable success criteria, and bounded scope. The
-specification MUST describe user value and business outcomes, not implementation details.
-Rationale: this prevents premature design lock-in and keeps delivery aligned to user impact.
+### I. 仕様先行の価値定義
+すべての機能は、優先順位付きユーザーストーリー、検証可能な受け入れシナリオ、
+測定可能な成功基準、明確に限定されたスコープを定義した仕様書から開始しなければならない。
+仕様書は実装詳細ではなく、利用者価値と業務上の成果を記述しなければならない。
+根拠: これにより設計の早すぎる固定化を防ぎ、提供内容を利用者への影響に整合させる。
 
-### II. Constitution-Gated Planning
-Implementation plans MUST pass a documented Constitution Check before research and again
-after design artifacts are produced. Any unresolved clarification or constitution violation
-MUST block progression until resolved or explicitly justified in a complexity record.
-Rationale: early and repeated gate checks prevent invalid plans from propagating into tasks.
+### II. 憲章ゲート付き計画
+実装計画は、調査前と設計成果物作成後の両方で、文書化された憲章チェックを通過しなければならない。
+未解決の確認事項または憲章違反がある場合は、それが解消されるか、複雑性記録で明示的に正当化されるまで、
+進行を停止しなければならない。
+根拠: 早期かつ反復的なゲート確認により、不正な計画がタスクへ波及することを防ぐ。
 
-### III. Story-Scoped Independent Delivery
-Work MUST be organized by user story so each story is independently implementable,
-verifiable, and demonstrable. Delivery MUST prioritize P1/MVP first, then add lower
-priority stories without regressing earlier value slices.
-Rationale: independent increments reduce integration risk and accelerate feedback.
+### III. ユーザーストーリー単位の独立提供
+作業はユーザーストーリーごとに構成し、各ストーリーが独立して実装、検証、実演できなければならない。
+提供順は P1/MVP を最優先とし、その後に下位優先度のストーリーを追加する際も、
+既存の価値提供を後退させてはならない。
+根拠: 独立した増分は統合リスクを下げ、フィードバックを早める。
 
-### IV. Verification by Explicit Criteria
-Each story MUST define an independent test or validation path before implementation
-tasks are considered complete. If tests are requested by the user or specification,
-test tasks MUST be authored first and MUST fail before implementation begins.
-Rationale: explicit verification criteria make quality outcomes auditable and repeatable.
+### IV. 明示的基準による検証
+各ストーリーは、実装完了とみなす前に独立したテストまたは検証経路を定義しなければならない。
+ユーザーまたは仕様でテストが要求されている場合、テストタスクは先に作成されなければならず、
+実装開始前に失敗する状態で存在しなければならない。
+根拠: 明示的な検証基準により、品質結果を監査可能かつ再現可能にする。
 
-### V. End-to-End Traceability
-Requirements, plan artifacts, and tasks MUST maintain traceable links across files with
-clear identifiers and concrete paths. Constitution conflicts are always critical and MUST
-be corrected in spec/plan/tasks or escalated as a constitution amendment.
-Rationale: traceability enables consistent reviews and deterministic handoffs.
+### V. エンドツーエンドのトレーサビリティ
+要求、計画成果物、タスクは、明確な識別子と具体的なパスを用いて、
+ファイル間で追跡可能なリンクを維持しなければならない。
+憲章との衝突は常に重大事項として扱い、spec/plan/tasks で修正するか、
+憲章改定としてエスカレーションしなければならない。
+根拠: トレーサビリティは一貫したレビューと決定論的な引き継ぎを可能にする。
 
-## Operational Constraints
+## 運用上の制約
 
-- The repository templates in `.specify/templates/` are normative sources for generated
-  artifacts and MUST remain synchronized with this constitution.
-- Specifications MUST avoid language/framework/API implementation details.
-- Plans MUST resolve all `NEEDS CLARIFICATION` items before Phase 1 design output.
-- Tasks MUST include exact file paths and dependency ordering needed for execution.
+- `.specify/templates/` 配下のリポジトリテンプレートは生成物の規範的ソースであり、
+  本憲章と同期された状態を維持しなければならない。
+- 仕様書は言語、フレームワーク、API の実装詳細を避けなければならない。
+- 計画書は Phase 1 の設計成果物に入る前に、すべての `NEEDS CLARIFICATION` 項目を解消しなければならない。
+- タスクは、実行に必要な正確なファイルパスと依存順序を含めなければならない。
 
-## Workflow & Quality Gates
+## 言語と文言の標準
 
-1. Specification Gate: `spec.md` includes prioritized stories, acceptance scenarios,
-   edge cases, functional requirements, and measurable success criteria.
-2. Planning Gate: `plan.md` includes Technical Context, Constitution Check outcomes,
-   and design artifacts that satisfy all constitutional principles.
-3. Tasking Gate: `tasks.md` is organized by story, includes executable file paths, and
-   preserves independent testability per story.
-4. Review Gate: any constitution non-compliance found during analysis/review MUST be
-   marked as blocking until remediated or formally amended.
+- 今後生成するドキュメント、画面表示メッセージ、バリデーションメッセージ、
+  API エラーメッセージは、日本語を標準としなければならない。
+- ユーザー向けの既定文言は日本語で記述し、特段の要件がない限り英語を既定値としてはならない。
+- 既存コードに英語の表示文言、バリデーションメッセージ、API エラーメッセージが残っている場合は、
+  継続的に日本語へ統一する方針を採用し、新規変更時にも日本語へ揃えなければならない。
+- 多言語対応が必要な場合でも、日本語を基準言語として扱い、仕様・設計・実装・レビューで明示しなければならない。
 
-## Governance
-This constitution supersedes conflicting workflow guidance in templates and prompt files.
-Amendments require: (1) proposed change with rationale, (2) explicit version bump decision
-using the policy below, (3) synchronization updates to affected templates, and
-(4) a Sync Impact Report recorded in the constitution update.
+## ワークフローと品質ゲート
 
-Versioning policy:
-- MAJOR: remove or redefine a core principle in a backward-incompatible way.
-- MINOR: add a new principle/section or materially expand mandatory guidance.
-- PATCH: clarifications, wording refinements, typo fixes, or non-semantic updates.
+1. 仕様ゲート: `spec.md` には、優先順位付きストーリー、受け入れシナリオ、
+   エッジケース、機能要件、測定可能な成功基準が含まれていなければならない。
+2. 計画ゲート: `plan.md` には、Technical Context、憲章チェック結果、
+   および本憲章のすべての原則を満たす設計成果物が含まれていなければならない。
+3. タスクゲート: `tasks.md` はストーリー単位で構成され、実行可能なファイルパスを含み、
+   ストーリーごとの独立検証可能性を維持しなければならない。
+4. レビューゲート: 分析やレビューで発見された憲章違反は、修正または正式改定されるまで
+   ブロッカーとして扱わなければならない。
 
-Compliance review expectations:
-- Every planning and analysis pass MUST evaluate constitution compliance explicitly.
-- Violations MUST be resolved before implementation proceeds.
-- Deferred items MUST be tracked as explicit TODOs in the constitution report.
+## ガバナンス
+この憲章は、テンプレートおよびプロンプトファイル内の矛盾するワークフロー指針に優先する。
+改定には、(1) 根拠付きの変更提案、(2) 下記ポリシーに基づく明示的なバージョン更新判断、
+(3) 影響を受けるテンプレートの同期更新、(4) 憲章更新に記録される Sync Impact Report
+が必要である。
 
-**Version**: 1.0.0 | **Ratified**: 2026-02-16 | **Last Amended**: 2026-02-16
+バージョンポリシー:
+- MAJOR: 基本原則を後方互換性なく削除または再定義する場合。
+- MINOR: 新たな原則や節を追加する場合、または必須ガイダンスを実質的に拡張する場合。
+- PATCH: 明確化、文言改善、誤記修正、または意味を変えない更新の場合。
+
+準拠レビューの期待事項:
+- すべての計画および分析では、憲章準拠を明示的に評価しなければならない。
+- 違反は、実装に進む前に解消しなければならない。
+- 保留項目は、憲章レポート上の明示的な TODO として追跡しなければならない。
+
+**Version**: 1.1.0 | **Ratified**: 2026-02-16 | **Last Amended**: 2026-03-09
