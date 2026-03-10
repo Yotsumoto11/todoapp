@@ -1,9 +1,8 @@
-import { createRoot } from 'react-dom/client';
+import { createRoot } from 'react-dom/client'
+import { TaskListPage } from './pages/TaskListPage'
 
-import { TaskListPage } from './pages/TaskListPage.js';
-
-const rootElement = document.getElementById('root');
+const rootElement = document.getElementById('root')
 
 if (rootElement) {
-  createRoot(rootElement).render(<TaskListPage />);
+  createRoot(rootElement).render(<TaskListPage />)
 }

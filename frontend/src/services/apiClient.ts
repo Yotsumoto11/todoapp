@@ -5,7 +5,11 @@ type ApiRequestInit = Omit<RequestInit, 'body'> & {
 };
 
 export async function apiClient<T>(path: string, init?: ApiRequestInit): Promise<T> {
-  const response = await fetch(`${API_BASE_URL}${path}`, {
+  const url = `${API_BASE_URL}${path}`;
+  // Temporary debug logs for tracing 404 and proxy routing issues.
+  console.log('request url:', url);
+
+  const response = await fetch(url, {
     ...init,
     headers: {
       'Content-Type': 'application/json',
@@ -13,6 +17,8 @@ export async function apiClient<T>(path: string, init?: ApiRequestInit): Promise
     },
     body: init?.body !== undefined ? JSON.stringify(init.body) : undefined
   });
+
+  console.log('response status:', response.status);
 
   if (!response.ok) {
     const payload = (await response.json().catch(() => null)) as { message?: string } | null;
