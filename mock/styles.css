@@ -297,44 +297,58 @@ button {
   max-width: 100%;
 }
 
-.form-grid {
+.form-row {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 96px;
   gap: 12px;
-  align-items: center;
+  align-items: start;
 }
 
-.form-row {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(72px, 96px);
-  gap: 12px;
-  align-items: center;
-}
-
-.form-row > * {
+.form-field {
   min-width: 0;
 }
 
 .form-card,
-.form-field,
-.form-grid {
+.form-field {
   min-width: 0;
   max-width: 100%;
 }
 
-.form-grid input[type="date"],
-.form-grid select,
-.form-row input[type="date"],
-.form-row select {
+.form-field label {
+  display: block;
+  min-width: 0;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.form-field input,
+.form-field select {
+  display: block;
   width: 100%;
   min-width: 0;
   height: 36px;
   box-sizing: border-box;
 }
 
-.form-row select {
-  padding: 4px 28px 4px 8px;
+.form-field--priority select {
+  width: 100%;
+  min-width: 0;
+  padding: 4px 24px 4px 8px;
   font-size: 13px;
+  line-height: 1.2;
+}
+
+@media (max-width: 1100px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.form-field--priority select {
+  padding: 4px 28px 4px 10px;
+  font-size: 13px;
+  line-height: 1.2;
 }
 
 .form-actions,
