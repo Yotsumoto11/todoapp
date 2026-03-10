@@ -226,6 +226,7 @@ const TASK_UI_STYLES = `
 .task-page textarea,
 .task-page select {
   width: 100%;
+  box-sizing: border-box;
   border: 1px solid #d8cfc2;
   border-radius: 12px;
   padding: 10px 12px;
