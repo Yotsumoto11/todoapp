@@ -1,5 +1,5 @@
 import { createRoot } from 'react-dom/client'
-import { TaskListPage } from './pages/TaskListPage'
+import { TaskListPage } from './pages/TaskListPage.js'
 
 const rootElement = document.getElementById('root')
 
