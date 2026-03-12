@@ -1,6 +1,6 @@
 export type TaskFilterStatus = 'all' | 'active' | 'completed';
 export type TaskSortValue = 'newest' | 'oldest' | 'dueDateAsc' | 'dueDateDesc' | 'priorityAsc' | 'priorityDesc';
-export type TaskDueWindow = 'all' | 'overdue' | 'dueSoon' | 'upcoming' | 'none';
+export type TaskDueWindow = 'all' | 'overdue' | 'today' | 'upcoming' | 'none';
 
 export type TaskFilterValues = {
   status: TaskFilterStatus;
@@ -52,7 +52,7 @@ export function TaskFilters({ values, onChange }: TaskFiltersProps) {
         >
           <option value="all">すべて</option>
           <option value="overdue">期限切れ</option>
-          <option value="dueSoon">期限が近い</option>
+          <option value="today">本日期限</option>
           <option value="upcoming">期限あり</option>
           <option value="none">期限なし</option>
         </select>

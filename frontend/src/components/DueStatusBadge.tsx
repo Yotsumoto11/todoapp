@@ -3,14 +3,14 @@ import type { DueState } from '../services/taskTypes.js';
 
 const STATUS_LABELS: Record<DueState, string> = {
   overdue: '期限切れ',
-  dueSoon: '期限が近い',
+  today: '本日期限',
   upcoming: '期限あり',
   none: '期限なし'
 };
 
 const STATUS_STYLES: Record<DueState, CSSProperties> = {
   overdue: { backgroundColor: '#fce8e6', color: '#7f1d1d', borderColor: '#fca5a5' },
-  dueSoon: { backgroundColor: '#fff4ce', color: '#713f12', borderColor: '#fcd34d' },
+  today: { backgroundColor: '#fff4ce', color: '#713f12', borderColor: '#fcd34d' },
   upcoming: { backgroundColor: '#e8f0fe', color: '#1e3a8a', borderColor: '#93c5fd' },
   none: { backgroundColor: '#f4f4f5', color: '#3f3f46', borderColor: '#d4d4d8' }
 };

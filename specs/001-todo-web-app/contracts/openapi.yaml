@@ -62,6 +62,8 @@ paths:
                     type: integer
                   total:
                     type: integer
+        '400':
+          $ref: '#/components/responses/BadRequest'
     post:
       summary: Create task
       requestBody:
@@ -88,6 +90,7 @@ paths:
           required: true
           schema:
             type: string
+            format: uuid
       requestBody:
         required: true
         content:
@@ -113,9 +116,12 @@ paths:
           required: true
           schema:
             type: string
+            format: uuid
       responses:
         '204':
           description: Task deleted
+        '400':
+          $ref: '#/components/responses/BadRequest'
         '404':
           $ref: '#/components/responses/NotFound'
 components:
@@ -135,7 +141,7 @@ components:
   schemas:
     Task:
       type: object
-      required: [id, title, status, priority, createdAt, updatedAt]
+      required: [id, title, status, priority, dueState, createdAt, updatedAt]
       properties:
         id:
           type: string
@@ -157,6 +163,9 @@ components:
         priority:
           type: string
           enum: [low, medium, high]
+        dueState:
+          type: string
+          enum: [overdue, today, upcoming, none]
         createdAt:
           type: string
           format: date-time
@@ -187,6 +196,7 @@ components:
           default: medium
     UpdateTaskRequest:
       type: object
+      minProperties: 1
       properties:
         title:
           type: string
@@ -214,3 +224,6 @@ components:
           type: string
         message:
           type: string
+        details:
+          type: object
+          additionalProperties: true

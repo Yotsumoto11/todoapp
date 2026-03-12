@@ -13,8 +13,8 @@ describe('Task query integration', () => {
   it('supports dueWindow and pagination behavior', async () => {
     await request(app).post('/tasks').send({ title: '期限なし' });
     await request(app).post('/tasks').send({ title: '期限切れ', dueDate: dayOffset(-1) });
-    await request(app).post('/tasks').send({ title: '期限が近い', dueDate: dayOffset(0) });
-    await request(app).post('/tasks').send({ title: '期限あり', dueDate: dayOffset(5) });
+    await request(app).post('/tasks').send({ title: '本日期限', dueDate: dayOffset(0) });
+    await request(app).post('/tasks').send({ title: '期限あり', dueDate: dayOffset(1) });
 
     const none = await request(app).get('/tasks?dueWindow=none');
     expect(none.status).toBe(200);
@@ -23,8 +23,8 @@ describe('Task query integration', () => {
     const overdue = await request(app).get('/tasks?dueWindow=overdue');
     expect(overdue.body.items.map((task: { title: string }) => task.title)).toEqual(['期限切れ']);
 
-    const dueSoon = await request(app).get('/tasks?dueWindow=dueSoon');
-    expect(dueSoon.body.items.map((task: { title: string }) => task.title)).toEqual(['期限が近い']);
+    const today = await request(app).get('/tasks?dueWindow=today');
+    expect(today.body.items.map((task: { title: string }) => task.title)).toEqual(['本日期限']);
 
     const upcoming = await request(app).get('/tasks?dueWindow=upcoming');
     expect(upcoming.body.items.map((task: { title: string }) => task.title)).toEqual(['期限あり']);

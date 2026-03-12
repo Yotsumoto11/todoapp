@@ -39,7 +39,7 @@ export function TaskItem({ task, onSaveEdits, onToggleStatus, onDeleteTask, dueS
   };
   const dueStateLabels = {
     overdue: '期限切れ',
-    dueSoon: '期限が近い',
+    today: '本日期限',
     upcoming: '期限あり',
     none: '期限なし'
   } as const;

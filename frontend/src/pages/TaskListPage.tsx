@@ -272,7 +272,7 @@ const TASK_UI_STYLES = `
   color: #b42318;
 }
 
-.task-page .status-dueSoon {
+.task-page .status-today {
   background: #fff4cc;
   color: #b54708;
 }

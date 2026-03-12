@@ -5,54 +5,73 @@
 - Node.js 22 LTS
 - npm 10+
 
-## Setup
+## Setup (copy/paste)
 
-1. Install dependencies.
-2. Initialize local database schema.
-3. Start backend and frontend.
+Run from repository root (`sample-spec-kit/`):
 
 ```bash
 npm install
 npm run db:setup
+```
+
+## Start backend/frontend (copy/paste)
+
+Terminal 1 (backend):
+
+```bash
+cd backend
 npm run dev
 ```
 
-## Validation Flow
-
-### US1 (MVP): Create, update, complete task
-
-1. Open app in browser.
-2. Create a task with title `Buy milk`.
-3. Edit description and set priority to high.
-4. Mark task as complete.
-5. Confirm list shows task in completed state.
-
-Expected result: Task lifecycle (create/edit/complete) works end-to-end.
-
-### US2: Filter and sort tasks
-
-1. Create at least 5 tasks with mixed states and due dates.
-2. Apply filter `status=todo`.
-3. Apply sort `dueDate asc`.
-4. Verify list excludes completed tasks and order is by due date.
-
-Expected result: Filtering and sorting produce deterministic list output.
-
-### US3: Overdue visibility
-
-1. Create tasks with due dates in past, today, and future.
-2. Keep all three as incomplete.
-3. Load task list.
-4. Verify overdue and due-today tasks are visually distinct.
-
-Expected result: Users can identify urgency without opening task detail.
-
-## Verification Commands
+Terminal 2 (frontend):
 
 ```bash
-npm run test:unit
-npm run test:integration
-npm run test:e2e
+cd frontend
+npm run dev
 ```
 
-Expected result: All test suites pass with no blocking failures.
+Open `http://localhost:5173`.
+
+## Automated verification (copy/paste)
+
+Run from repository root (`sample-spec-kit/`):
+
+```bash
+npm run test:contract
+npm run test:integration
+cd frontend
+npx vitest run tests/e2e
+```
+
+Expected result: all commands finish with passing tests.
+
+## today vocabulary check (manual)
+
+1. In the UI, create three incomplete tasks:
+   - overdue task: due date = yesterday
+   - today task: due date = today
+   - upcoming task: due date = tomorrow
+2. In filter `期限`, select `本日期限`.
+3. Confirm only the task due today remains visible.
+4. Confirm badge labels use `本日期限` (not `期限が近い`).
+
+## today vocabulary check (API example)
+
+With backend running on `http://localhost:3000`:
+
+```bash
+TODAY=$(date -u +%F)
+TOMORROW=$(date -u -d '+1 day' +%F)
+
+curl -s -X POST http://localhost:3000/tasks \
+  -H 'Content-Type: application/json' \
+  -d "{\"title\":\"today-task\",\"dueDate\":\"$TODAY\"}" >/dev/null
+
+curl -s -X POST http://localhost:3000/tasks \
+  -H 'Content-Type: application/json' \
+  -d "{\"title\":\"upcoming-task\",\"dueDate\":\"$TOMORROW\"}" >/dev/null
+
+curl -s "http://localhost:3000/tasks?dueWindow=today"
+```
+
+Expected result: response `items` include `today-task`, and each item has `dueState: "today"`.

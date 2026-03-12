@@ -1,16 +1,14 @@
-export type DueState = 'overdue' | 'dueSoon' | 'upcoming' | 'none';
-
-export const DUE_SOON_DAYS = 3;
+export type DueState = 'overdue' | 'today' | 'upcoming' | 'none';
 
 function toUtcDateStart(value: Date): Date {
   return new Date(Date.UTC(value.getUTCFullYear(), value.getUTCMonth(), value.getUTCDate()));
 }
 
-export function getDueSoonEndExclusive(now: Date = new Date()): Date {
+function getTomorrowStart(now: Date = new Date()): Date {
   const todayStart = toUtcDateStart(now);
-  const end = new Date(todayStart);
-  end.setUTCDate(end.getUTCDate() + DUE_SOON_DAYS + 1);
-  return end;
+  const tomorrowStart = new Date(todayStart);
+  tomorrowStart.setUTCDate(tomorrowStart.getUTCDate() + 1);
+  return tomorrowStart;
 }
 
 export function classifyDueState(dueDate: Date | null, now: Date = new Date()): DueState {
@@ -25,8 +23,8 @@ export function classifyDueState(dueDate: Date | null, now: Date = new Date()): 
     return 'overdue';
   }
 
-  if (dueDay.getTime() < getDueSoonEndExclusive(now).getTime()) {
-    return 'dueSoon';
+  if (dueDay.getTime() < getTomorrowStart(now).getTime()) {
+    return 'today';
   }
 
   return 'upcoming';

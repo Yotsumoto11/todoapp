@@ -34,14 +34,14 @@ function classifyDueState(dueDate: string | null): DueState {
   }
 
   const today = addDays(0);
-  const dueSoonCutoff = addDays(3);
+  const tomorrow = addDays(1);
 
   if (dueDate < today) {
     return 'overdue';
   }
 
-  if (dueDate <= dueSoonCutoff) {
-    return 'dueSoon';
+  if (dueDate < tomorrow) {
+    return 'today';
   }
 
   return 'upcoming';
@@ -100,7 +100,7 @@ function applyQuery(tasks: Task[], query: URLSearchParams): Task[] {
     filtered = filtered.filter((task) => task.status === status);
   }
 
-  if (dueWindow === 'overdue' || dueWindow === 'dueSoon' || dueWindow === 'upcoming' || dueWindow === 'none') {
+  if (dueWindow === 'overdue' || dueWindow === 'today' || dueWindow === 'upcoming' || dueWindow === 'none') {
     filtered = filtered.filter((task) => task.dueState === dueWindow);
   }
 
@@ -120,7 +120,7 @@ function countQueryTotal(tasks: Task[], query: URLSearchParams): number {
     }
 
     if (
-      (dueWindow === 'overdue' || dueWindow === 'dueSoon' || dueWindow === 'upcoming' || dueWindow === 'none') &&
+      (dueWindow === 'overdue' || dueWindow === 'today' || dueWindow === 'upcoming' || dueWindow === 'none') &&
       task.dueState !== dueWindow
     ) {
       return false;

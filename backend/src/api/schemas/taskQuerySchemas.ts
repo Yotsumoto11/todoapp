@@ -4,7 +4,7 @@ export const taskListQuerySchema =
   z
     .object({
       status: z.enum(['todo', 'done']).optional(),
-      dueWindow: z.enum(['overdue', 'dueSoon', 'upcoming', 'none']).optional(),
+      dueWindow: z.enum(['overdue', 'today', 'upcoming', 'none']).optional(),
       sortBy: z.enum(['createdAt', 'dueDate', 'priority']).optional(),
       sortOrder: z.enum(['asc', 'desc']).optional(),
       page: z.coerce.number().int().min(1, 'ページ番号は1以上で指定してください。').default(1),

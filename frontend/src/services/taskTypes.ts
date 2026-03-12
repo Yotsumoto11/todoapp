@@ -1,6 +1,6 @@
 export type TaskStatus = 'todo' | 'done';
 export type TaskPriority = 'low' | 'medium' | 'high';
-export type DueState = 'overdue' | 'dueSoon' | 'upcoming' | 'none';
+export type DueState = 'overdue' | 'today' | 'upcoming' | 'none';
 
 export type Task = {
   id: string;
