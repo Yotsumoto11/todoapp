@@ -9,34 +9,47 @@ paths:
   /tasks:
     get:
       summary: List tasks with optional filtering and sorting
+      description: |
+        Returns paginated tasks.
+        If `sortBy` is omitted, tasks are returned in `createdAt` descending order (newest first).
       parameters:
         - in: query
           name: status
+          description: Filter by completion status.
           schema:
             type: string
             enum: [todo, done]
+          example: todo
         - in: query
           name: dueWindow
+          description: Filter by due date window.
           schema:
             type: string
             enum: [overdue, today, upcoming, none]
+          example: today
         - in: query
           name: sortBy
+          description: |
+            Sort key. When omitted, API applies default sorting by `createdAt` descending.
           schema:
             type: string
             enum: [createdAt, dueDate, priority]
+          example: dueDate
         - in: query
           name: sortOrder
+          description: Sort direction. Valid only when `sortBy` is provided.
           schema:
             type: string
             enum: [asc, desc]
             default: asc
+          example: asc
         - in: query
           name: page
           schema:
             type: integer
             minimum: 1
             default: 1
+          example: 1
         - in: query
           name: pageSize
           schema:
@@ -44,6 +57,7 @@ paths:
             minimum: 1
             maximum: 100
             default: 20
+          example: 20
       responses:
         '200':
           description: Task list
@@ -51,6 +65,7 @@ paths:
             application/json:
               schema:
                 type: object
+                required: [items, page, pageSize, total]
                 properties:
                   items:
                     type: array
@@ -62,8 +77,38 @@ paths:
                     type: integer
                   total:
                     type: integer
+              examples:
+                defaultSort:
+                  summary: Default sorting when sortBy is omitted (createdAt desc)
+                  value:
+                    items:
+                      - id: 13e4d7c8-a2c5-4f68-bad0-8f3d6ba6f0f5
+                        title: Submit report
+                        description: Monthly summary
+                        status: todo
+                        dueDate: '2026-03-15'
+                        priority: high
+                        dueState: upcoming
+                        createdAt: '2026-03-12T08:30:00.000Z'
+                        updatedAt: '2026-03-12T08:30:00.000Z'
+                        completedAt: null
+                      - id: 2db78f1f-6d57-46f6-b3c5-49dbd7b87235
+                        title: Buy milk
+                        description: null
+                        status: todo
+                        dueDate: null
+                        priority: medium
+                        dueState: none
+                        createdAt: '2026-03-11T09:00:00.000Z'
+                        updatedAt: '2026-03-11T09:00:00.000Z'
+                        completedAt: null
+                    page: 1
+                    pageSize: 20
+                    total: 2
         '400':
           $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
     post:
       summary: Create task
       requestBody:
@@ -72,6 +117,18 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/CreateTaskRequest'
+            examples:
+              minimal:
+                summary: Create task with required field only
+                value:
+                  title: Buy milk
+              full:
+                summary: Create task with optional fields
+                value:
+                  title: Submit report
+                  description: Monthly summary
+                  dueDate: '2026-03-15'
+                  priority: high
       responses:
         '201':
           description: Task created
@@ -79,8 +136,23 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Task'
+              examples:
+                created:
+                  value:
+                    id: 13e4d7c8-a2c5-4f68-bad0-8f3d6ba6f0f5
+                    title: Submit report
+                    description: Monthly summary
+                    status: todo
+                    dueDate: '2026-03-15'
+                    priority: high
+                    dueState: upcoming
+                    createdAt: '2026-03-12T08:30:00.000Z'
+                    updatedAt: '2026-03-12T08:30:00.000Z'
+                    completedAt: null
         '400':
           $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
   /tasks/{taskId}:
     patch:
       summary: Update task details and/or status
@@ -97,6 +169,22 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/UpdateTaskRequest'
+            examples:
+              markDone:
+                summary: Mark task as done
+                value:
+                  status: done
+              editFields:
+                summary: Edit title/description/priority
+                value:
+                  title: Submit final report
+                  description: Includes KPI section
+                  priority: high
+              clearOptionals:
+                summary: Clear nullable fields
+                value:
+                  description: null
+                  dueDate: null
       responses:
         '200':
           description: Task updated
@@ -104,10 +192,25 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Task'
+              examples:
+                updated:
+                  value:
+                    id: 13e4d7c8-a2c5-4f68-bad0-8f3d6ba6f0f5
+                    title: Submit final report
+                    description: Includes KPI section
+                    status: done
+                    dueDate: '2026-03-15'
+                    priority: high
+                    dueState: upcoming
+                    createdAt: '2026-03-12T08:30:00.000Z'
+                    updatedAt: '2026-03-12T10:00:00.000Z'
+                    completedAt: '2026-03-12T10:00:00.000Z'
         '400':
           $ref: '#/components/responses/BadRequest'
         '404':
           $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
     delete:
       summary: Delete task
       parameters:
@@ -124,6 +227,8 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '404':
           $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
 components:
   responses:
     BadRequest:
@@ -132,19 +237,46 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            invalidPayload:
+              value:
+                code: BAD_REQUEST
+                message: 入力内容を確認してください。
+                details:
+                  formErrors: []
+                  fieldErrors:
+                    title:
+                      - タイトルを入力してください。
     NotFound:
       description: Resource not found
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            taskNotFound:
+              value:
+                code: NOT_FOUND
+                message: タスクが見つかりません。
+    InternalServerError:
+      description: Unexpected server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            unexpectedError:
+              value:
+                code: INTERNAL_SERVER_ERROR
+                message: 予期しないサーバーエラーが発生しました。
   schemas:
     Task:
       type: object
-      required: [id, title, status, priority, dueState, createdAt, updatedAt]
+      required: [id, title, description, status, dueDate, priority, dueState, createdAt, updatedAt, completedAt]
       properties:
         id:
           type: string
+          format: uuid
         title:
           type: string
           minLength: 1
