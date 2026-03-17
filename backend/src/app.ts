@@ -6,7 +6,14 @@ import { errorHandler, notFoundHandler } from './middleware/errorHandler.js';
 export const app = express();
 
 app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', 'http://localhost:5173');
+  const origin = req.headers.origin;
+  const allowedOriginPattern = /^http:\/\/localhost:517[0-9]$/;
+
+  if (typeof origin === 'string' && allowedOriginPattern.test(origin)) {
+    res.header('Access-Control-Allow-Origin', origin);
+    res.header('Vary', 'Origin');
+  }
+
   res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');
   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 

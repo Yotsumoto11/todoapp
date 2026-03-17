@@ -6,7 +6,11 @@
       "type": "shell",
       "command": "npm run dev",
       "options": {
-        "cwd": "${workspaceFolder}/backend"
+        "cwd": "/home/ayotsumo/proj/sample-spec-kit/backend",
+        "shell": {
+          "executable": "/bin/bash",
+          "args": ["-lc"]
+        }
       },
       "isBackground": true,
       "presentation": {
@@ -21,7 +25,11 @@
       "type": "shell",
       "command": "npm run dev",
       "options": {
-        "cwd": "${workspaceFolder}/frontend"
+        "cwd": "/home/ayotsumo/proj/sample-spec-kit/frontend",
+        "shell": {
+          "executable": "/bin/bash",
+          "args": ["-lc"]
+        }
       },
       "isBackground": true,
       "presentation": {
