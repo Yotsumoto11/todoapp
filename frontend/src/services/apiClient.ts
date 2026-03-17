@@ -1,4 +1,4 @@
-const API_BASE_URL = '';
+const API_BASE_URL = 'http://localhost:3000';
 
 type ApiRequestInit = Omit<RequestInit, 'body'> & {
   body?: unknown;
@@ -6,7 +6,6 @@ type ApiRequestInit = Omit<RequestInit, 'body'> & {
 
 export async function apiClient<T>(path: string, init?: ApiRequestInit): Promise<T> {
   const url = `${API_BASE_URL}${path}`;
-  // Temporary debug logs for tracing 404 and proxy routing issues.
   console.log('request url:', url);
 
   const response = await fetch(url, {
